@@ -38,7 +38,11 @@ static int snd_rpi_rpi_adc_hw_params(struct snd_pcm_substream *substream,
 	struct snd_soc_pcm_runtime *rtd = substream->private_data;
 	struct snd_soc_dai *cpu_dai = rtd->cpu_dai;
 
-	return snd_soc_dai_set_bclk_ratio(cpu_dai, 32*2);
+        unsigned int sample_bits =
+                snd_pcm_format_physical_width(params_format(params));
+
+        /* data sheet save this can be 256|384|512 * samplefreq */
+        return snd_soc_dai_set_bclk_ratio(cpu_dai, sample_bits * 2);
 }
 
 /* machine stream operations */
@@ -48,7 +52,7 @@ static struct snd_soc_ops snd_rpi_rpi_adc_ops = {
 
 static struct snd_soc_dai_link snd_rpi_rpi_adc_dai[] = {
 {
-	.name		= "HifiBerry Mini ADC",
+	.name		= "PCM1804A ADC",
 	.stream_name	= "PCM1804A ADC HiFi",
 	.cpu_dai_name	= "bcm2708-i2s.0",
 	.codec_dai_name	= "pcm1803a-hifi",
@@ -97,5 +101,5 @@ static struct platform_driver snd_rpi_rpi_adc_driver = {
 module_platform_driver(snd_rpi_rpi_adc_driver);
 
 MODULE_AUTHOR("Nick Gregory <nick@openenterprise.co.uk>");
-MODULE_DESCRIPTION("ASoC Driver for RPi-ADC");
+MODULE_DESCRIPTION("ASoC Driver for PCM1804A ADC");
 MODULE_LICENSE("GPL v2");
