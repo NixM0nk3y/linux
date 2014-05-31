@@ -41,8 +41,7 @@ static int snd_rpi_rpi_adc_hw_params(struct snd_pcm_substream *substream,
         unsigned int sample_bits =
                 snd_pcm_format_physical_width(params_format(params));
 
-        /* data sheet save this can be 256|384|512 * samplefreq */
-        return snd_soc_dai_set_bclk_ratio(cpu_dai, sample_bits * 2);
+        return snd_soc_dai_set_bclk_ratio(cpu_dai, 32*2);
 }
 
 /* machine stream operations */
