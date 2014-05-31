@@ -1,6 +1,10 @@
 /*
  * Driver for the PCM1803A codec
  *
+ * Author:      Nick Gregory <nick@openenterprise.co.uk>
+ *              Copyright 2014
+ *
+ * based on pcm1794a.c
  * Author:	Florian Meier <florian.meier@koalo.de>
  *		Copyright 2013
  *
@@ -24,11 +28,11 @@
 static struct snd_soc_dai_driver pcm1803a_dai = {
 	.name = "pcm1803a-hifi",
 	.capture = {
+                .stream_name = "Capture",
 		.channels_min = 2,
 		.channels_max = 2,
 		.rates = SNDRV_PCM_RATE_8000_192000,
-		.formats = SNDRV_PCM_FMTBIT_S16_LE |
-			   SNDRV_PCM_FMTBIT_S24_LE
+		.formats = SNDRV_PCM_FMTBIT_S24_LE
 	},
 };
 
