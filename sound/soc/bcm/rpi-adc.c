@@ -4,6 +4,10 @@
  * Author:	Nick Gregory <nick@openenterprise.co.uk>
  *		Copyright 2014
  *
+ * based on rpi-dac.c 
+ * Author:      Florian Meier <florian.meier@koalo.de>
+ *              Copyright 2013
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * version 2 as published by the Free Software Foundation.
@@ -45,7 +49,7 @@ static struct snd_soc_ops snd_rpi_rpi_adc_ops = {
 static struct snd_soc_dai_link snd_rpi_rpi_adc_dai[] = {
 {
 	.name		= "HifiBerry Mini ADC",
-	.stream_name	= "HifiBerry Mini ADC HiFi",
+	.stream_name	= "PCM1804A ADC HiFi",
 	.cpu_dai_name	= "bcm2708-i2s.0",
 	.codec_dai_name	= "pcm1803a-hifi",
 	.platform_name	= "bcm2708-i2s.0",
