@@ -680,6 +680,19 @@ static struct platform_device snd_pcm1794a_codec_device = {
 };
 #endif
 
+#if defined(CONFIG_SND_BCM2708_SOC_RPI_ADC) || defined(CONFIG_SND_BCM2708_SOC_RPI_ADC_MODULE)
+static struct platform_device snd_rpi_adc_device = {
+        .name = "snd-rpi-adc",
+        .id = 0,
+        .num_resources = 0,
+};
+
+static struct platform_device snd_pcm1803a_codec_device = {
+        .name = "pcm1803a-codec",
+        .id = -1,
+        .num_resources = 0,
+};
+#endif
 
 #if defined(CONFIG_SND_BCM2708_SOC_IQAUDIO_DAC) || defined(CONFIG_SND_BCM2708_SOC_IQAUDIO_DAC_MODULE)
 static struct platform_device snd_rpi_iqaudio_dac_device = {
@@ -836,6 +849,11 @@ void __init bcm2708_init(void)
 #if defined(CONFIG_SND_BCM2708_SOC_RPI_DAC) || defined(CONFIG_SND_BCM2708_SOC_RPI_DAC_MODULE)
         bcm_register_device(&snd_rpi_dac_device);
         bcm_register_device(&snd_pcm1794a_codec_device);
+#endif
+
+#if defined(CONFIG_SND_BCM2708_SOC_RPI_ADC) || defined(CONFIG_SND_BCM2708_SOC_RPI_ADC_MODULE)
+        bcm_register_device(&snd_rpi_adc_device);
+        bcm_register_device(&snd_pcm1803a_codec_device);
 #endif
 
 #if defined(CONFIG_SND_BCM2708_SOC_IQAUDIO_DAC) || defined(CONFIG_SND_BCM2708_SOC_IQAUDIO_DAC_MODULE)
