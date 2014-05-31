@@ -39,7 +39,7 @@ static int snd_rpi_rpi_adc_hw_params(struct snd_pcm_substream *substream,
 
 /* machine stream operations */
 static struct snd_soc_ops snd_rpi_rpi_adc_ops = {
-	.hw_params = snd_rpi_rpi_dac_hw_params,
+	.hw_params = snd_rpi_rpi_adc_hw_params,
 };
 
 static struct snd_soc_dai_link snd_rpi_rpi_adc_dai[] = {
@@ -64,34 +64,34 @@ static struct snd_soc_card snd_rpi_rpi_adc = {
 	.num_links    = ARRAY_SIZE(snd_rpi_rpi_adc_dai),
 };
 
-static int snd_rpi_rpi_dac_probe(struct platform_device *pdev)
+static int snd_rpi_rpi_adc_probe(struct platform_device *pdev)
 {
 	int ret = 0;
 
-	snd_rpi_rpi_dac.dev = &pdev->dev;
-	ret = snd_soc_register_card(&snd_rpi_rpi_dac);
+	snd_rpi_rpi_adc.dev = &pdev->dev;
+	ret = snd_soc_register_card(&snd_rpi_rpi_adc);
 	if (ret)
 		dev_err(&pdev->dev, "snd_soc_register_card() failed: %d\n", ret);
 
 	return ret;
 }
 
-static int snd_rpi_rpi_dac_remove(struct platform_device *pdev)
+static int snd_rpi_rpi_adc_remove(struct platform_device *pdev)
 {
-	return snd_soc_unregister_card(&snd_rpi_rpi_dac);
+	return snd_soc_unregister_card(&snd_rpi_rpi_adc);
 }
 
-static struct platform_driver snd_rpi_rpi_dac_driver = {
+static struct platform_driver snd_rpi_rpi_adc_driver = {
         .driver = {
-                .name   = "snd-rpi-dac",
+                .name   = "snd-rpi-adc",
                 .owner  = THIS_MODULE,
         },
-        .probe          = snd_rpi_rpi_dac_probe,
-        .remove         = snd_rpi_rpi_dac_remove,
+        .probe          = snd_rpi_rpi_adc_probe,
+        .remove         = snd_rpi_rpi_adc_remove,
 };
 
-module_platform_driver(snd_rpi_rpi_dac_driver);
+module_platform_driver(snd_rpi_rpi_adc_driver);
 
-MODULE_AUTHOR("Florian Meier <florian.meier@koalo.de>");
+MODULE_AUTHOR("Nick Gregory <nick@openenterprise.co.uk>");
 MODULE_DESCRIPTION("ASoC Driver for RPi-ADC");
 MODULE_LICENSE("GPL v2");
