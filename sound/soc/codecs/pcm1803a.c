@@ -31,8 +31,12 @@ static struct snd_soc_dai_driver pcm1803a_dai = {
                 .stream_name = "Capture",
 		.channels_min = 2,
 		.channels_max = 2,
-		.rates = SNDRV_PCM_RATE_8000_192000,
-		.formats = SNDRV_PCM_FMTBIT_S24_LE
+                .rates = SNDRV_PCM_RATE_32000 |
+                         SNDRV_PCM_RATE_44100 |
+                         SNDRV_PCM_RATE_48000 |
+                         SNDRV_PCM_RATE_88200 |
+                         SNDRV_PCM_RATE_96000,
+                .formats = SNDRV_PCM_FMTBIT_S32_LE
 	},
 };
 
