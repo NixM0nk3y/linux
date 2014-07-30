@@ -27,6 +27,10 @@
 #include <sound/soc.h>
 #include <sound/jack.h>
 
+#include "../codecs/pcm1803a.h"
+
+static int samplerate = 44100;
+
 static int snd_rpi_rpi_adc_init(struct snd_soc_pcm_runtime *rtd)
 {
 	return 0;
@@ -36,12 +40,32 @@ static int snd_rpi_rpi_adc_hw_params(struct snd_pcm_substream *substream,
 				       struct snd_pcm_hw_params *params)
 {
 	struct snd_soc_pcm_runtime *rtd = substream->private_data;
-	struct snd_soc_dai *cpu_dai = rtd->cpu_dai;
+        struct snd_soc_dai *codec_dai = rtd->codec_dai;
 
-        unsigned int sample_bits =
-                snd_pcm_format_physical_width(params_format(params));
+        int sysclk =  24576000 ; /* This is fixed on this board */
 
-        return snd_soc_dai_set_bclk_ratio(cpu_dai, 32*2);
+        int ret;
+
+        samplerate = params_rate(params);
+      
+        ret = snd_soc_dai_set_pll(codec_dai, PCM1803A_PLL1, PCM1803A_PLL_SRC_MCLK1, samplerate * 512, samplerate * 64);
+
+        if (ret < 0) {
+                dev_err(substream->pcm->dev,
+                "Failed to set ADC PLL: %d\n", ret);
+                return ret;
+        }
+
+        ret = snd_soc_dai_set_sysclk(codec_dai, PCM1803A_CLK_SRC_PLL1, samplerate * 512 , SND_SOC_CLOCK_IN);
+
+        if (ret < 0) {
+                dev_err(substream->pcm->dev,
+                "Failed to set ADC SYSCLK: %d\n", ret);
+                return ret;
+        }
+
+        //return snd_soc_dai_set_bclk_ratio(cpu_dai, 32*2);
+        return 0;
 }
 
 /* machine stream operations */
@@ -58,7 +82,7 @@ static struct snd_soc_dai_link snd_rpi_rpi_adc_dai[] = {
 	.platform_name	= "bcm2708-i2s.0",
 	.codec_name	= "pcm1803a-codec",
 	.dai_fmt	= SND_SOC_DAIFMT_I2S | SND_SOC_DAIFMT_NB_NF |
-				SND_SOC_DAIFMT_CBS_CFS,
+				SND_SOC_DAIFMT_CBM_CFM,
 	.ops		= &snd_rpi_rpi_adc_ops,
 	.init		= snd_rpi_rpi_adc_init,
 },
